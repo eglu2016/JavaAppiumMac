@@ -1,0 +1,2 @@
+# JavaAppiumMac
+project on Mac
