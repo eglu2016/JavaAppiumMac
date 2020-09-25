@@ -6,11 +6,13 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
+
 import java.util.List;
 
 public class Utils {
     public Utils() throws Exception {
     }
+
     private AppiumDriver driver = AppiumWebDriver.getInstance();
     private WaitingElements waitingElement = new WaitingElements();
 
@@ -102,5 +104,12 @@ public class Utils {
         Assert.assertEquals(error_message,
                 actual_text,
                 expected_text);
+    }
+
+    public void assertElementPresent(By by, String error_message) {
+        WebElement element = waitingElement.waitForElementPresent(
+                by,
+                error_message,
+                0);
     }
 }

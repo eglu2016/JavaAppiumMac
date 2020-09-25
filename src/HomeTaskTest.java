@@ -337,4 +337,36 @@ public class HomeTaskTest {
                 search_text_second_article,
                 "Wrong title in opened article");
     }
+
+    /**
+     * Сложные тесты
+     * Тест: assert title
+     */
+    @Test
+    public void testAssertTitle() {
+        // click 'Search Wikipedia' input
+        waitElement.waitForElementAndClick(
+                By.xpath(search_wikipedia_input_locator),
+                "Cannot find 'Search Wikipedia' input",
+                10);
+
+        // enter text in Search... input
+        String search_line = "Android";
+        waitElement.waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                search_line,
+                "Cannot find 'Search...' input and enter " + search_line,
+                10);
+
+        // click by text
+        String search_text_article = "Android (operating system)";
+        waitElement.waitForElementAndClick(
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='" + search_text_article + "']"),
+                "Cannot click by text: " + search_text_article + " in search results list",
+                20);
+
+        // check appears title, timeout = 0
+        utils.assertElementPresent(By.xpath(title_text_open_page_locator),
+                "Cannot find title: " + search_text_article);
+    }
 }
