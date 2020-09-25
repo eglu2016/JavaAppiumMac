@@ -279,6 +279,6 @@ public class StudyTest {
         Assert.assertEquals(
                 "Article title have been changed after screen rotation (portrait)",
                 title_before_rotate, title_after_second_rotate);
-        Thread.sleep(5000);
+        Thread.sleep(500);
     }
 }
