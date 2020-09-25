@@ -294,8 +294,8 @@ public class StudyTest {
                 By.xpath(search_input_locator),
                 "Java",
                 "Cannot find Search... input",
-                10);
-        // check appears text
+                10)
+        /* check appears text */
         waitElement.waitForElementPresent(
                 By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
                 "Cannot displayed result search",
