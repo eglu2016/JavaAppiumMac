@@ -13,8 +13,9 @@ import java.util.List;
 
 /**
  * Простые сценарии в Appium
+ * 
  */
-public class ThirdTaskTest {
+public class HomeTaskTest {
 
     private AppiumDriver driver;
     private WaitingElements waitElement;
