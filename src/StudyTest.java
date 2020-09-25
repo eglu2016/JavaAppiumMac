@@ -34,7 +34,7 @@ public class StudyTest {
     }
 
     @Test
-    public void FirstTest() throws Exception {
+    public void testFirst() throws Exception {
         // click Search Wikipedia input
         waitElement.waitForElementAndClick(
                 By.xpath("//*[id='org.wikipedia:id/search_container']"),
@@ -254,14 +254,14 @@ public class StudyTest {
                 "Cannot find 'Java (programming language)' topic searching by " + search_line,
                 20);
         // get article value
-        String title_before_rotate = waitElement.waitForElementAndGetValue(
+        String title_before_rotate = waitElement.waitForElementAndGetText(
                 By.xpath(title_article_locator),
                 "Cannot find title of article",
                 15);
         // rotate screen
         driver.rotate(ScreenOrientation.LANDSCAPE);
         // get article value
-        String title_after_rotate = waitElement.waitForElementAndGetValue(
+        String title_after_rotate = waitElement.waitForElementAndGetText(
                 By.xpath(title_article_locator),
                 "Cannot find title of article after rotation",
                 15);
@@ -271,7 +271,7 @@ public class StudyTest {
         // rotate screen
         driver.rotate(ScreenOrientation.PORTRAIT);
         // get article value
-        String title_after_second_rotate = waitElement.waitForElementAndGetValue(
+        String title_after_second_rotate = waitElement.waitForElementAndGetText(
                 By.xpath(title_article_locator),
                 "Cannot find title of article after rotation",
                 15);

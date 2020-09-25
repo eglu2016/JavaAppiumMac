@@ -2,6 +2,7 @@ package Tools;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -73,5 +74,16 @@ public class Utils {
             String default_message = "An element " + by.toString() + " supposed to be present";
             throw new AssertionError(default_message + " " + error_message);
         }
+    }
+
+    public void assertElementHasText(By by, String expected_text, String error_message) {
+        WebElement element = waitingElement.waitForElementPresent(
+                by,
+                "Cannot find element " + by.toString(),
+                30);
+        String actual_text = element.getText();
+        Assert.assertEquals(error_message,
+                actual_text,
+                expected_text);
     }
 }

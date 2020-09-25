@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class WaitingElements {
     public WaitingElements() throws Exception {
     }
@@ -49,9 +51,15 @@ public class WaitingElements {
         return element.getAttribute(attribute);
     }
 
-    public String waitForElementAndGetValue(By by, String error_message, long timeOutInSecond) {
+    public String waitForElementAndGetText(By by, String error_message, long timeOutInSecond) {
         WebElement element = waitForElementPresent(by, error_message, timeOutInSecond);
         return element.getText();
+    }
+
+    public List<WebElement> waitForElementsPresent(By by, String error_message, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
 
 }
