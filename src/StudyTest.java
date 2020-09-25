@@ -1,16 +1,13 @@
+import Tools.AppiumWebDriver;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.AndroidDriver;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.net.URL;
 import java.util.List;
 
 public class StudyTest {
@@ -19,16 +16,7 @@ public class StudyTest {
 
     @Before
     public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "8.0");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app",
-                "/Users/evgeniy_g/coures/project/JavaAppiumMac/apks/org.wikipedia.apk");
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = AppiumWebDriver.getInstance();
     }
 
     @After
@@ -249,12 +237,15 @@ public class StudyTest {
 
         String search_result_locator = "//*[contains(@resource-id,'search_results_list')]" +
                 "/*[contains(@resource-id,'page_list_item_container')]";
-        String empty_results_label_locator = "//*[@text()='No results found']";
+        String empty_results_label_locator = "//*[@text='No results found']";
         waitForElementPresent(
                 By.xpath(empty_results_label_locator),
                 " >>> Cannot find empty result label by the request " + search_line,
-                15
-        );
+                15);
+        assertElementNotPresent(
+                By.xpath(search_result_locator),
+                "We've found some results by request " + search_line);
+
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSecond) {
@@ -343,5 +334,13 @@ public class StudyTest {
     private int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
+    }
+
+    private void assertElementNotPresent(By by, String error_message) {
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements > 0) {
+            String default_message = "An element " + by.toString() + " supposed to be present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
     }
 }
