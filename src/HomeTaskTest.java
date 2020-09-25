@@ -21,6 +21,15 @@ public class HomeTaskTest {
     String search_wikipedia_input_locator = "//*[contains(@resource-id,'search_container')]";
     String search_input_locator = "//*[contains(@resource-id,'search_src_text')]";
     String search_close_button_locator = "//*[contains(@resource-id,'search_close_btn')]";
+    String title_text_open_page_locator = "//*[contains(@resource-id,'view_page_title_text')]";
+    String more_options_item_locator = "//android.widget.ImageView[@content-desc='More options']";
+    String add_to_reading_list_locator = "//*[@text='Add to reading list']";
+    String got_it_button_locator = "//*[@resource-id='org.wikipedia:id/onboarding_button']";
+    String name_of_list_input_locator = "//*[@resource-id='org.wikipedia:id/text_input']";
+    String ok_button_locator = "//*[@text='OK']";
+    String navigate_up_button_locator = "//android.widget.ImageButton[@content-desc='Navigate up']";
+    String my_list_button_locator = "//android.widget.FrameLayout[@content-desc='My lists']";
+    String title_list_of_results_locator = "//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
     @Before
     public void setUp() throws Exception {
@@ -147,5 +156,185 @@ public class HomeTaskTest {
         }
     }
 
+    /**
+     * Сложные тесты
+     * Тест: сохранение двух статей
+     */
+    @Test
+    public void testSavedOfTwoArticles() {
 
+        // click 'Search Wikipedia' input
+        waitElement.waitForElementAndClick(
+                By.xpath(search_wikipedia_input_locator),
+                "Cannot find 'Search Wikipedia' input",
+                10);
+
+        // enter text in Search... input
+        String search_line = "Android";
+        waitElement.waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                search_line,
+                "Cannot find 'Search...' input and enter " + search_line,
+                10);
+
+        // click by text
+        String search_text_first_article = "Android (operating system)";
+        waitElement.waitForElementAndClick(
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='" + search_text_first_article + "']"),
+                "Cannot click by text: " + search_text_first_article + " in search results list",
+                20);
+
+        // check title first article
+        utils.assertElementHasText(
+                By.xpath(title_text_open_page_locator),
+                search_text_first_article,
+                "Wrong text title opened first article");
+
+        // click 'More options' element
+        waitElement.waitForElementAndClick(
+                By.xpath(more_options_item_locator),
+                "Cannot find 'More options' button",
+                5);
+
+        // click 'Add to reading list' item
+        waitElement.waitForElementAndClick(
+                By.xpath(add_to_reading_list_locator),
+                "Cannot find 'Add to reading list' item",
+                5);
+
+        // click 'Got It'
+        waitElement.waitForElementAndClick(
+                By.xpath(got_it_button_locator),
+                "Cannot find 'Got It' button",
+                5);
+
+        // clear Name of List input
+        waitElement.waitForElementAndClear(
+                By.xpath(name_of_list_input_locator),
+                "Cannot find 'Name of List' input",
+                10);
+
+        // enter text in Name of List input
+        String name_of_folder = "os_lists";
+        waitElement.waitForElementAndSendKeys(
+                By.xpath(name_of_list_input_locator),
+                name_of_folder,
+                "Cannot put text in 'Name of List' input " + name_of_folder,
+                5);
+
+        // click 'OK'
+        waitElement.waitForElementAndClick(
+                By.xpath(ok_button_locator),
+                "Cannot press 'OK' button",
+                5);
+
+        // click 'Navigate Up' button
+        waitElement.waitForElementAndClick(
+                By.xpath(navigate_up_button_locator),
+                "Cannot close article, cannot find X link",
+                5);
+
+        // click 'Search Wikipedia' input
+        waitElement.waitForElementAndClick(
+                By.xpath(search_wikipedia_input_locator),
+                "Cannot find 'Search Wikipedia' input after click X button",
+                10);
+
+        // enter text in Search... input
+        search_line = "Microsoft Windows";
+        waitElement.waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                search_line,
+                "Cannot find 'Search...' input and enter " + search_line,
+                10);
+
+        // click by text for open second article
+        String search_text_second_article = "Microsoft Windows";
+        waitElement.waitForElementAndClick(
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='" + search_text_second_article + "']"),
+                "Cannot click by text: " + search_text_second_article + " in search results list",
+                20);
+
+        // check title second article
+        utils.assertElementHasText(
+                By.xpath(title_text_open_page_locator),
+                search_text_second_article,
+                "Wrong text title opened second article");
+
+        // click 'More options' element
+        waitElement.waitForElementAndClick(
+                By.xpath(more_options_item_locator),
+                "Cannot find 'More options' button for second article",
+                5);
+
+        // click 'Add to reading list' item
+        waitElement.waitForElementAndClick(
+                By.xpath(add_to_reading_list_locator),
+                "Cannot find 'Add to reading list' item for second article",
+                5);
+
+        // click 'os_lists' element
+        waitElement.waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Cannot find '" + name_of_folder + "'",
+                10);
+
+        // click 'Navigate Up' button for close second article
+        waitElement.waitForElementAndClick(
+                By.xpath(navigate_up_button_locator),
+                "Cannot close second article, cannot find X link",
+                5);
+
+        // click My List button
+        waitElement.waitForElementAndClick(
+                By.xpath(my_list_button_locator),
+                "Cannot find navigation 'My lists' button",
+                10);
+
+        // click created folder
+        waitElement.waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Cannot find created folder " + name_of_folder,
+                5);
+
+        // get list of result in name folder
+        List<WebElement> result_list_elements = waitElement.waitForElementsPresent(
+                By.xpath(title_list_of_results_locator),
+                "Cannot find elements in list of results " + name_of_folder,
+                10);
+
+        // check amount element in name folder
+        Assert.assertTrue(
+                "Wrong amount elements in " + name_of_folder,
+                result_list_elements.size() == 2);
+
+        // get webElement for delete
+        WebElement element_for_delete = null;
+        for (int i = 0; i < result_list_elements.size(); i++) {
+            String title_name = result_list_elements.get(i).getText();
+            if (title_name.equals(search_text_first_article)) {
+                element_for_delete = result_list_elements.get(i);
+            }
+        }
+
+        // check webElement is not null
+        Assert.assertNotNull(
+                "Cannot initialized webElement for delete",
+                element_for_delete);
+
+        // delete element with text first article
+        utils.swipeElementToLeft(element_for_delete);
+
+        // open element in list, when not deleted
+        waitElement.waitForElementAndClick(
+                By.xpath(title_list_of_results_locator),
+                "Cannot find element for open in list of result " + name_of_folder,
+                10);
+
+        // check title article
+        utils.assertElementHasText(
+                By.xpath(title_text_open_page_locator),
+                search_text_second_article,
+                "Wrong title in opened article");
+    }
 }

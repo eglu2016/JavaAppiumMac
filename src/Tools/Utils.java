@@ -63,6 +63,23 @@ public class Utils {
                 .perform();
     }
 
+    public void swipeElementToLeft(WebElement element) {
+        // получаем левую точку по оси Х
+        int left_x = element.getLocation().getX();
+        // получаем правую точку по оси X
+        int right_x = left_x + element.getSize().getWidth();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(right_x, middle_y)
+                .waitAction(300)
+                .moveTo(left_x, middle_y)
+                .release()
+                .perform();
+    }
+
     public int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
