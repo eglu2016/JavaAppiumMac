@@ -9,11 +9,12 @@ import io.appium.java_client.AppiumDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.List;
 
 /**
  * Простые сценарии в Appium
- * 
+ * Сложные тесты
  */
 public class HomeTaskTest {
 
@@ -37,6 +38,9 @@ public class HomeTaskTest {
         driver.quit();
     }
 
+    /*
+     * Создание метода
+     */
     @Test
     public void testMethodCreation() {
         String search_wikipedia_input_locator = "//*[contains(@resource-id,'search_container')]" +
@@ -51,6 +55,9 @@ public class HomeTaskTest {
                 "Cannot find 'In the news' text in title");
     }
 
+    /*
+     * Тест: отмена поиска
+     */
     @Test
     public void testCancelSearch() {
         // click 'Search Wikipedia' input
@@ -104,6 +111,9 @@ public class HomeTaskTest {
                 10);
     }
 
+    /*
+     * Тест: проверка слов в поиске
+     */
     @Test
     public void testCheckWorldsInSearch() {
         // click 'Search Wikipedia' input
