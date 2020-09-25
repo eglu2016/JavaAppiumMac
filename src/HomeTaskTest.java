@@ -4,6 +4,7 @@ import Tools.Utils;
 import Tools.WaitingElements;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import io.appium.java_client.AppiumDriver;
 import org.junit.After;
@@ -40,6 +41,7 @@ public class HomeTaskTest {
 
     @After
     public void tearDown() {
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
