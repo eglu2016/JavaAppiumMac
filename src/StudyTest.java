@@ -37,12 +37,12 @@ public class StudyTest {
     public void testFirst() throws Exception {
         // click Search Wikipedia input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[id='org.wikipedia:id/search_container']"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 10);
         // enter Java text in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "Java",
                 "Cannot find Search... input",
                 10);
@@ -58,12 +58,12 @@ public class StudyTest {
     public void testSwipeArticleTitle() throws InterruptedException {
         // click 'Search Wikipedia' input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id, 'search_container')]"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 10);
         // enter text in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "Appium",
                 "Cannot find Search... input",
                 10);
@@ -91,18 +91,18 @@ public class StudyTest {
     public void testSaveFirstArticleToMyList() throws InterruptedException {
         // click 'Search Wikipedia' input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 10);
         // enter text in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "Java",
                 "Cannot find Search... input",
                 10);
         // check appears text
         waitElement.waitForElementPresent(
-                By.xpath("//*[contains(@resource-id, 'search_results_list')]//*[@text='Java (programming language)']"),
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
                 "Cannot displayed result search",
                 20);
         // click by text
@@ -185,14 +185,14 @@ public class StudyTest {
     public void testAmountOfNotEmptySearch() {
         // click 'Search Wikipedia' input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 10);
 
         String search_line = "linkin park discography";
         // enter text in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@resource-id,'search_src_text')]"),
+                By.xpath(search_input_locator),
                 search_line,
                 "Cannot find Search... input",
                 10);
@@ -280,5 +280,33 @@ public class StudyTest {
                 "Article title have been changed after screen rotation (portrait)",
                 title_before_rotate, title_after_second_rotate);
         Thread.sleep(500);
+    }
+
+    @Test
+    public void testCheckSearchArticleInBackground() throws InterruptedException {
+        // click 'Search Wikipedia' input
+        waitElement.waitForElementAndClick(
+                By.xpath(search_wikipedia_input_locator),
+                "Cannot find Search Wikipedia input",
+                10);
+        // enter text in Search... input
+        waitElement.waitForElementAndSendKeys(
+                By.xpath(search_input_locator),
+                "Java",
+                "Cannot find Search... input",
+                10);
+        // check appears text
+        waitElement.waitForElementPresent(
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
+                "Cannot displayed result search",
+                20);
+        // background
+        driver.runAppInBackground(2);
+        // check appears text
+        waitElement.waitForElementPresent(
+                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
+                "Cannot displayed result search after background",
+                20);
+        Thread.sleep(3000);
     }
 }
