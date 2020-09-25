@@ -8,8 +8,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/*
+ * Study test
+ */
 public class StudyTest {
-
     private AppiumDriver driver;
     private WaitingElements waitElement;
     private Utils utils;
@@ -294,7 +296,7 @@ public class StudyTest {
                 By.xpath(search_input_locator),
                 "Java",
                 "Cannot find Search... input",
-                10)
+                10);
         /* check appears text */
         waitElement.waitForElementPresent(
                 By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
