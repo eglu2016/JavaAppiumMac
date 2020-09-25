@@ -15,9 +15,14 @@ import java.util.List;
  * Простые сценарии в Appium
  */
 public class ThirdTaskTest {
+
     private AppiumDriver driver;
     private WaitingElements waitElement;
     private Utils utils;
+
+    String search_wikipedia_input_locator = "//*[contains(@resource-id,'search_container')]";
+    String search_input_locator = "//*[contains(@resource-id,'search_src_text')]";
+    String search_close_button_locator = "//*[contains(@resource-id,'search_close_btn')]";
 
     @Before
     public void setUp() throws Exception {
@@ -49,13 +54,13 @@ public class ThirdTaskTest {
     public void testCancelSearch() {
         // click 'Search Wikipedia' input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 20);
 
         // input words 'iata code' in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "iata code",
                 "Cannot input value in 'Search...' input",
                 10);
@@ -76,26 +81,24 @@ public class ThirdTaskTest {
                 "Cannot find second result, after search",
                 20
         );
+        // check
         Assert.assertTrue(
                 "Second result cannot contains IATA code; Actual value = " + actual_value,
                 actual_value.contains("IATA code"));
-
         // clear Search... input
         waitElement.waitForElementAndClear(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "Cannot find Search... input",
                 10
         );
-
         // click X button
         waitElement.waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id,'search_close_btn')]"),
+                By.xpath(search_close_button_locator),
                 "Cannot find X to cancel search",
                 10);
-
         // check X disappeared
         waitElement.waitForElementIsNotPresent(
-                By.xpath("//*[contains(@resource-id,'search_close_btn')]"),
+                By.xpath(search_close_button_locator),
                 "X is still present on page",
                 10);
     }
@@ -104,13 +107,13 @@ public class ThirdTaskTest {
     public void testCheckWorldsInSearch() {
         // click 'Search Wikipedia' input
         waitElement.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_container']"),
+                By.xpath(search_wikipedia_input_locator),
                 "Cannot find Search Wikipedia input",
                 20);
 
         // input word 'Java' in Search... input
         waitElement.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_src_text']"),
+                By.xpath(search_input_locator),
                 "Java",
                 "Cannot enter value in 'Search...' input",
                 10);
