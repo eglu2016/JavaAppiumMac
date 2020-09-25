@@ -12,10 +12,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-/**
- * Простые сценарии в Appium
- * Сложные тесты
- */
 public class HomeTaskTest {
 
     private AppiumDriver driver;
@@ -38,7 +34,8 @@ public class HomeTaskTest {
         driver.quit();
     }
 
-    /*
+    /**
+     * Простые сценарии в Appium
      * Создание метода
      */
     @Test
@@ -55,7 +52,8 @@ public class HomeTaskTest {
                 "Cannot find 'In the news' text in title");
     }
 
-    /*
+    /**
+     * Простые сценарии в Appium
      * Тест: отмена поиска
      */
     @Test
@@ -111,7 +109,8 @@ public class HomeTaskTest {
                 10);
     }
 
-    /*
+    /**
+     * Простые сценарии в Appium
      * Тест: проверка слов в поиске
      */
     @Test
@@ -147,4 +146,6 @@ public class HomeTaskTest {
                     actual_title_value.contains("Java") || actual_description_value.contains("Java"));
         }
     }
+
+
 }
