@@ -367,7 +367,8 @@ public class HomeTaskTest {
                 "Cannot click by text: " + search_text_article + " in search results list",
                 20);
 
-        // check appears title, timeout = 0
+        // waitElement.waitForElementPresent(By.xpath(title_text_open_page_locator), "", 20);
+        // check appears title
         utils.assertElementPresent(By.xpath(title_text_open_page_locator),
                 "Cannot find title: " + search_text_article);
     }

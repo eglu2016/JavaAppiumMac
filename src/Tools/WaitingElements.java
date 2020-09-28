@@ -61,5 +61,4 @@ public class WaitingElements {
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
-
 }

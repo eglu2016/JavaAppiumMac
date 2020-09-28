@@ -107,9 +107,15 @@ public class Utils {
     }
 
     public void assertElementPresent(By by, String error_message) {
-        WebElement element = waitingElement.waitForElementPresent(
-                by,
-                error_message,
-                0);
+        boolean elementIsEnabled = true;
+        try {
+            driver.findElement(by);
+        }
+        catch (Exception e) {
+            elementIsEnabled = false;
+        }
+        Assert.assertTrue(
+                error_message + "; locator: " + by.toString(),
+                elementIsEnabled);
     }
 }
