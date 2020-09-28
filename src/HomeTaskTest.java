@@ -41,7 +41,6 @@ public class HomeTaskTest {
 
     @After
     public void tearDown() {
-        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
