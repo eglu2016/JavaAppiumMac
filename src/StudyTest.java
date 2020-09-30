@@ -1,7 +1,5 @@
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.junit.Test;
@@ -74,97 +72,26 @@ public class StudyTest extends CoreTestCase {
     }
 
     @Test
-    public void testSaveFirstArticleToMyList() throws InterruptedException {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find Search Wikipedia input",
-                10);
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                "Java",
-                "Cannot find Search... input",
-                10);
-        // check appears text
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
-                "Cannot displayed result search",
-                20);
-        // click by text
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id, 'search_results_list')]//*[@text='Java (programming language)']"),
-                "Cannot click by text",
-                5);
-        // check appears title
-        MainPageObject.waitForElementPresent(
-                By.xpath(title_article_locator),
-                "Cannot find title",
-                20);
-        // click More options element
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
-                "Cannot find 'More options' button",
-                5);
-        // click 'Add to reading list'
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='Add to reading list']"),
-                "Cannot find 'Add to reading list' item",
-                5);
-        // click 'Got It'
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/onboarding_button']"),
-                "Cannot find 'Got It' button",
-                5);
-        // clear Name of List input
-        MainPageObject.waitForElementAndClear(
-                By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
-                "Cannot find 'Name of List' input",
-                10);
+    public void testSaveFirstArticleToMyList() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+        String article_title = ArticlePageObject.getArticleTitle();
         String name_of_folder = "Learning programming";
-        // set Learning programing in input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
-                name_of_folder,
-                "Cannot put text in 'Name of List' input",
-                5);
-        // click 'OK'
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='OK']"),
-                "Cannot press 'OK' button",
-                5);
-        // click 'Navigate Up' button
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
-                " >>> Cannot close article, cannot find X link",
-                5);
-        // click My List button
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
-                "Cannot find navigation 'My lists' button",
-                10);
-        // click 'Learning programming' folder
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text='" + name_of_folder + "']"),
-                " >>> Cannot find created folder",
-                5);
-        // wait appears 'Java (programming language)' title
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Cannot find 'Java (programming language)' title",
-                10);
-        // swipe for delete
-        MainPageObject.swipeElementToLeft(
-                By.xpath("//*[@text='Java (programming language)']"),
-                ">>> Cannot find saved article"
-        );
-        // check what deleted article
-        MainPageObject.waitForElementIsNotPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                ">>> Cannot delete saved article",
-                5
-        );
-        Thread.sleep(1000);
+        ArticlePageObject.addArticleToMyList(name_of_folder);
+        ArticlePageObject.closeArticle();
+
+        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI.clickMyList();
+
+        MyListPageObject MyListPageObject = new MyListPageObject(driver);
+        MyListPageObject.openFolderByName(name_of_folder);
+        MyListPageObject.swipeByArticleToDelete(article_title);
     }
 
     @Test
