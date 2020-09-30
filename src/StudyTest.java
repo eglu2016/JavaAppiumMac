@@ -1,4 +1,5 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
@@ -24,46 +25,52 @@ public class StudyTest extends CoreTestCase {
     private String search_result_locator = "//*[contains(@resource-id,'search_results_list')]" +
             "/*[contains(@resource-id,'page_list_item_container')]";
     private String title_article_locator = "//*[contains(@resource-id, 'view_page_title_text')]";
+    private String search_close_button_locator = "//*[contains(@resource-id,'search_close_btn')]";
 
     @Test
     public void testSearch() {
         SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
 
     @Test
-    public void testSwipeArticleTitle() throws InterruptedException {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find Search Wikipedia input",
-                10);
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                "Appium",
-                "Cannot find Search... input",
-                10);
+    public void testCancelSearch() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        // click by text
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Appium']"),
-                "Cannot click by text",
-                20);
-        // check appears title
-        MainPageObject.waitForElementPresent(
-                By.xpath(title_article_locator),
-                "Cannot find title",
-                20);
-        // View page in browser
-        MainPageObject.swipeUpToFindElement(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_external_link']"),
-                "Cannot find the end of the article",
-                20
-        );
-        Thread.sleep(500);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickCancelSearch();
+        SearchPageObject.waitForCancelButtonToDisAppear();
+    }
+
+    @Test
+    public void testCompareArticleTitle() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String article_title = ArticlePageObject.getArticleTitle();
+
+        Assert.assertEquals("We see unexpected title!",
+                "Java (programming language)",
+                article_title);
+    }
+
+    @Test
+    public void testSwipeArticleTitle() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Appium");
+        SearchPageObject.clickByArticleWithSubstring("Appium");
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.swipeToFooter();
     }
 
     @Test
