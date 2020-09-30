@@ -24,3 +24,5 @@ hs_err_pid*
 .idea/.name
 *.xml
 *.iml
+.idea/.name
+.idea/modules.xml

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JavaAppiumAutomationMac.iml" filepath="$PROJECT_DIR$/JavaAppiumAutomationMac.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAppiumMac.iml" filepath="$PROJECT_DIR$/JavaAppiumMac.iml" />
     </modules>
   </component>
 </project>
