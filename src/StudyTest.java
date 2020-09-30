@@ -20,10 +20,8 @@ public class StudyTest extends CoreTestCase {
     private String search_input_locator = "//*[contains(@resource-id,'search_src_text')]";
 
     private String empty_results_label_locator = "//*[@text='No results found']";
-    private String search_result_locator = "//*[contains(@resource-id,'search_results_list')]" +
-            "/*[contains(@resource-id,'page_list_item_container')]";
+
     private String title_article_locator = "//*[contains(@resource-id, 'view_page_title_text')]";
-    private String search_close_button_locator = "//*[contains(@resource-id,'search_close_btn')]";
 
     @Test
     public void testSearch() {
@@ -96,54 +94,25 @@ public class StudyTest extends CoreTestCase {
 
     @Test
     public void testAmountOfNotEmptySearch() {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find Search Wikipedia input",
-                10);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
+        SearchPageObject.initSearchInput();
         String search_line = "linkin park discography";
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                search_line,
-                "Cannot find Search... input",
-                10);
-        // wait result search
-        MainPageObject.waitForElementPresent(
-                By.xpath(search_result_locator),
-                "Cannot find anything by the request " + search_line,
-                20);
-        // check
-        int amount_of_search_result = MainPageObject.getAmountOfElements(By.xpath(search_result_locator));
+        SearchPageObject.typeSearchLine(search_line);
+        int amount_of_search_result = SearchPageObject.getAmountOfFoundArticles();
         Assert.assertTrue("We found too few results",
                 amount_of_search_result > 0);
     }
 
     @Test
     public void testAmountOfEmptySearch() {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find 'Search Wikipedia' input",
-                10);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
+        SearchPageObject.initSearchInput();
         String search_line = "xcdafgh";
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                search_line,
-                "Cannot find 'Search...' input",
-                10);
-        //
-        MainPageObject.waitForElementPresent(
-                By.xpath(empty_results_label_locator),
-                " >>> Cannot find empty result label by the request " + search_line,
-                15);
-        // check
-        MainPageObject.assertElementNotPresent(
-                By.xpath(search_result_locator),
-                "We've found some results by request " + search_line);
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.waitForEmptyResultsLabel();
+        SearchPageObject.assertThereIsNoResultSearch();
     }
 
     @Test

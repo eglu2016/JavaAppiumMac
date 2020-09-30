@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 /**
@@ -15,7 +16,10 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_INPUT = "//*[contains(@resource-id,'search_src_text')]",
         SEARCH_CANCEL_BUTTON = "//*[contains(@resource-id,'search_close_btn')]",
         SEARCH_RESULT_BY_SUBSTRING_TPL =
-                "//*[contains(@resource-id,'page_list_item_container')]//*[contains(@text,'{SUBSTRING}')]";
+                "//*[contains(@resource-id,'page_list_item_container')]//*[contains(@text,'{SUBSTRING}')]",
+        SEARCH_RESULT_ELEMENT = "//*[contains(@resource-id,'search_results_list')]" +
+            "/*[contains(@resource-id,'page_list_item_container')]",
+        SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
 
     public SearchPageObject(AppiumDriver driver) {
         // берем драйвер из MainPageObject
@@ -75,5 +79,23 @@ public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementAndClick(By.xpath(search_result_xpath),
                 "Cannot find and click search result with substring " + substring, 15);
+    }
+
+    public int getAmountOfFoundArticles() {
+        this.waitForElementPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "Cannot find anything by the request", 20);
+        return  this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    }
+
+    public void waitForEmptyResultsLabel() {
+        this.waitForElementPresent(
+                By.xpath(SEARCH_EMPTY_RESULT_ELEMENT),
+                "Cannot find empty result label", 15);
+    }
+
+    public void assertThereIsNoResultSearch() {
+        this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT),
+                "We supposed not to find any results");
     }
 }
