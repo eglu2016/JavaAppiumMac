@@ -116,79 +116,34 @@ public class StudyTest extends CoreTestCase {
     }
 
     @Test
-    public void testChangeScreenOrientationOnSearchResults() throws InterruptedException {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find 'Search Wikipedia' input",
-                10);
+    public void testChangeScreenOrientationOnSearchResults() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        String search_line = "Java";
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                search_line,
-                "Cannot find 'Search...' input",
-                10);
-        // click by text
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id, 'search_results_list')]//*[@text='Java (programming language)']"),
-                "Cannot find 'Java (programming language)' topic searching by " + search_line,
-                20);
-        // get article value
-        String title_before_rotate = MainPageObject.waitForElementAndGetText(
-                By.xpath(title_article_locator),
-                "Cannot find title of article",
-                15);
-        // rotate screen
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-        // get article value
-        String title_after_rotate = MainPageObject.waitForElementAndGetText(
-                By.xpath(title_article_locator),
-                "Cannot find title of article after rotation",
-                15);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String title_before_rotate = ArticlePageObject.getArticleTitle();
+        this.rotateScreenLandscape();
+        String title_after_rotate = ArticlePageObject.getArticleTitle();
         Assert.assertEquals(
                 "Article title have been changed after screen rotation",
                 title_before_rotate, title_after_rotate);
-        // rotate screen
-        driver.rotate(ScreenOrientation.PORTRAIT);
-        // get article value
-        String title_after_second_rotate = MainPageObject.waitForElementAndGetText(
-                By.xpath(title_article_locator),
-                "Cannot find title of article after rotation",
-                15);
-        // check
+        this.rotateScreenPortrait();
+        String title_after_second_rotate = ArticlePageObject.getArticleTitle();
         Assert.assertEquals(
                 "Article title have been changed after screen rotation (portrait)",
                 title_before_rotate, title_after_second_rotate);
-        Thread.sleep(500);
     }
 
     @Test
     public void testCheckSearchArticleInBackground() throws InterruptedException {
-        // click 'Search Wikipedia' input
-        MainPageObject.waitForElementAndClick(
-                By.xpath(search_wikipedia_input_locator),
-                "Cannot find Search Wikipedia input",
-                10);
-        // enter text in Search... input
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath(search_input_locator),
-                "Java",
-                "Cannot find Search... input",
-                10);
-        /* check appears text */
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
-                "Cannot displayed result search",
-                20);
-        // background
-        driver.runAppInBackground(2);
-        // check appears text
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@resource-id,'search_results_list')]//*[@text='Java (programming language)']"),
-                "Cannot displayed result search after background",
-                20);
-        Thread.sleep(3000);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        this.backgroundApp(2);
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        Thread.sleep(1000);
     }
 }
