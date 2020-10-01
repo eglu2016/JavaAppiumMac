@@ -2,8 +2,6 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
-import lib.ui.MyListPageObject;
-import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
 
