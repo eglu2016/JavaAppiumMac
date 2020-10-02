@@ -62,6 +62,13 @@ public class MainPageObject {
         return element.getText();
     }
 
+    /**
+     * waitForElementsPresent
+     * @param by
+     * @param error_message
+     * @param timeOutInSeconds
+     * @return
+     */
     public List<WebElement> waitForElementsPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + "\n");

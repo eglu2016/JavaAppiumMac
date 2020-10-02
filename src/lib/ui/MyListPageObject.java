@@ -48,4 +48,11 @@ public class MyListPageObject extends  MainPageObject {
                 "Cannot find saved article by title " + article_title);
         waitForArticleToDisappearByTitle(article_title);
     }
+
+    public void clickByArticleTitleInFolder(String article_title) {
+        this.waitForElementAndClick(
+                By.xpath(getSavedXpathByArticle(article_title)),
+                "Cannot find and click article by title " + article_title,
+                15);
+    }
 }
