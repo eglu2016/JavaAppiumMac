@@ -6,6 +6,7 @@ import lib.ui.MyListPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import sun.plugin2.os.windows.SECURITY_ATTRIBUTES;
 
 public class ComplexScripts extends CoreTestCase {
     @Test
@@ -51,5 +52,13 @@ public class ComplexScripts extends CoreTestCase {
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
         ArticlePageObject.waitForTitleElement();
         ArticlePageObject.assertArticleTitle("Android (operating system)");
+    }
+
+    @Test
+    public void testCheckResultsSearchByTitleAndDescription() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("BMW 3 Series");
+        SearchPageObject.waitForElementByTitleAndDescription("BMW", "BMW");
     }
 }

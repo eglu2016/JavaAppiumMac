@@ -10,6 +10,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+
 public class MainPageObject {
 
     protected AppiumDriver driver;
@@ -162,7 +165,7 @@ public class MainPageObject {
                 "Cannot find element " + by.toString(),
                 30);
         String actual_text = element.getText();
-        Assert.assertEquals(error_message,
+        assertEquals(error_message,
                 actual_text,
                 expected_text);
     }
@@ -175,7 +178,7 @@ public class MainPageObject {
         catch (Exception e) {
             elementIsEnabled = false;
         }
-        Assert.assertTrue(
+        assertTrue(
                 error_message + "; locator: " + by.toString(),
                 elementIsEnabled);
     }

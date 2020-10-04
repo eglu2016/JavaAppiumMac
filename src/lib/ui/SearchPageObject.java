@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * Класс в котором будут методы для поиска
  */
@@ -26,8 +28,13 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INIT_TEXT = "//*[contains(@resource-id,'search_container')]" +
                     "/*[@class='android.widget.TextView']",
             LIST_ITEM_CONTAINER = "//*[contains(@resource-id,'page_list_item_container')]",
-            LIST_ITEM_TITLE = "//*[contains(@resource-id,'page_list_item_title')]",
-            LIST_ITEM_DESCRIPTION = "//*[contains(@resource-id, 'page_list_item_description')]";
+            LIST_ITEM_TITLE = "//*[contains(@resource-id, 'page_list_item_title')]",
+            LIST_ITEM_DESCRIPTION = "//*[contains(@resource-id, 'page_list_item_description')]",
+            LIST_RESULTS_BY_TILE_AND_DESCRIPTION_TPL =
+                    "//*[contains(@resource-id,'title') and contains(@text,'{SUBTITLE}')]" +
+                    "/..//*[contains(@resource-id,'description') and contains(@text,'{SUBDESCRIPTION}')]";
+
+
 
     public SearchPageObject(AppiumDriver driver) {
         // берем драйвер из MainPageObject
@@ -37,6 +44,10 @@ public class SearchPageObject extends MainPageObject {
     /* TEMPLATES METHODS */
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+    private static String getResultSearchElementByTitleAndDescription(String subtitle, String subdecription) {
+        String return_xpath = LIST_RESULTS_BY_TILE_AND_DESCRIPTION_TPL.replace("{SUBTITLE}", subtitle);
+        return return_xpath.replace("{SUBDESCRIPTION}", subdecription);
     }
     /* TEMPLATE METHODS */
 
@@ -125,10 +136,21 @@ public class SearchPageObject extends MainPageObject {
                     By.xpath(LIST_ITEM_TITLE)).getText();
             String actual_description_value = result_items.get(i).findElement(
                     By.xpath(LIST_ITEM_DESCRIPTION)).getText();
-            Assert.assertTrue(
+            assertTrue(
                     "Cannot find word " + exp_text + " in 'title' or 'description' in result page\nAR = " +
                             actual_title_value + " / " + actual_description_value,
                     actual_title_value.contains(exp_text) || actual_description_value.contains(exp_text));
         }
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String xpath = this.getResultSearchElementByTitleAndDescription(title, description);
+        List<WebElement> result_items = this.waitForElementsPresent(By.xpath(xpath),
+                "Cannot find results on 'Result page'; when title contains text: " + title +
+                        " and description contains text" + description,
+                15);
+        assertTrue(
+                "Amount results on 'Result Page' less 3",
+                result_items.size() >= 3);
     }
 }
